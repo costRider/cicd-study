@@ -19,4 +19,4 @@ phases:
   post_build:
     commands:
       - echo post Building
-      - aws s3 sync ./dist s3://webserver-bucket-kdt014 --delete
+      - aws s3 sync ./my-vue-repo/dist s3://webserver-bucket-kdt014 --delete
