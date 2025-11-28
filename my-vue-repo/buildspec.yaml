@@ -19,7 +19,7 @@ phases:
   post_build:
     commands:
       - echo post Building
-      - aws s3 sync ./dist s3://webserver-bucket-kdt014 --delete
+      - aws s3 sync ./dist s3://codedeploy-vue-webapp-kdt014 --delete
 artifacts:
   files:
    - dist/**/*
