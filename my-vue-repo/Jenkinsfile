@@ -17,10 +17,10 @@ pipeline {
 
         stage('Install & Build') {
             steps {
-                 {      sh 'cd my-vue-repo'
+                       sh 'cd my-vue-repo'
                         sh 'npm install'
                         sh 'npm run build'
-                    }
+                    
             }
         }
 
