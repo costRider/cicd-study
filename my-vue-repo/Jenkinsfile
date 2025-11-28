@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        S3_BUCKET = 'vue-website-12'
+        S3_BUCKET = 'webserver-bucket-kdt014'
         AWS_DEFAULT_REGION = 'ap-northeast-2'
     }
 
@@ -17,20 +17,16 @@ pipeline {
 
         stage('Install & Build') {
             steps {
-                dir('my-vue-repo') {      // ← Vue 프로젝트 폴더
-                    nodejs(nodeJSInstallationName: 'node22') {
+                 {      sh 'cd my-vue-repo'
                         sh 'npm install'
                         sh 'npm run build'
                     }
-                }
             }
         }
 
         stage('Deploy to S3') {
             steps {
-                dir('my-vue-repo') {      // dist가 여기 안에 생성됨
                     sh "aws s3 sync ./dist s3://${S3_BUCKET} --delete"
-                }
             }
         }
     }
