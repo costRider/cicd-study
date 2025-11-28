@@ -1,35 +1,46 @@
 pipeline {
- agent any
- environment {
- S3_BUCKET = 'vue-website-12'
- AWS_DEFAULT_REGION = 'ap-northeast-2'
- }
- stages {
- stage('Checkout') {
- steps {
- git credentialsId: 'github-token', url: 'https://github.com/costRider/cicd-study.git', branch: 'main'
- }
- }
- stage('Install & Build') {
- steps {
- nodejs(nodeJSInstallationName: 'node22') {
- sh 'npm install'
- sh 'npm run build'
- }
- }
- }
- stage('Deploy to S3') {
- steps {
- sh "aws s3 sync ./dist s3://webserver-bucket-kdt014 --delete"
- }
- }
- }
- post {
- success {
- echo ' S3 배포 완료!'
- }
- failure {
- echo ' 빌드 실패'
- }
- }
+    agent any
+
+    environment {
+        S3_BUCKET = 'vue-website-12'
+        AWS_DEFAULT_REGION = 'ap-northeast-2'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: 'github-token',
+                    url: 'https://github.com/costRider/cicd-study.git',
+                    branch: 'main'
+            }
+        }
+
+        stage('Install & Build') {
+            steps {
+                dir('my-vue-repo') {      // ← Vue 프로젝트 폴더
+                    nodejs(nodeJSInstallationName: 'node22') {
+                        sh 'npm install'
+                        sh 'npm run build'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to S3') {
+            steps {
+                dir('my-vue-repo') {      // dist가 여기 안에 생성됨
+                    sh "aws s3 sync ./dist s3://${S3_BUCKET} --delete"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'S3 배포 완료!'
+        }
+        failure {
+            echo '빌드 실패'
+        }
+    }
 }
