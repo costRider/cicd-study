@@ -22,6 +22,7 @@ phases:
       - echo post Building
       - aws s3 sync ./dist s3://webserver-bucket-kdt014 --delete
 artifacts:
+  base-directory: my-vue-repo
   files:
    - dist/**/*
    - appspec.yml
