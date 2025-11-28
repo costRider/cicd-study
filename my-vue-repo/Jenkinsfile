@@ -17,16 +17,22 @@ pipeline {
 
         stage('Install & Build') {
             steps {
-                       sh 'cd my-vue-repo'
+                dir('my-vue-repo') {
+                    nodejs(nodeJSInstallationName: 'nodejs22') {
+                        sh 'node -v'
+                        sh 'npm -v'
                         sh 'npm install'
                         sh 'npm run build'
-                    
+                    }
+                }
             }
         }
 
         stage('Deploy to S3') {
             steps {
-                    sh "aws s3 sync ./dist s3://webserver-bucket-kdt014 --delete"
+                dir('my-vue-repo') {
+                    sh "aws s3 sync ./dist s3://${S3_BUCKET} --delete"
+                }
             }
         }
     }
