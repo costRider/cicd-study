@@ -21,3 +21,9 @@ phases:
     commands:
       - echo post Building
       - aws s3 sync ./dist s3://webserver-bucket-kdt014 --delete
+artifacts:
+  files:
+   - dist/**/*
+   - appspec.yml
+   - scripts/**/*
+  discard-paths: no
