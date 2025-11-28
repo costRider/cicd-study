@@ -11,7 +11,6 @@ phases:
   pre_build:
     commands:
       - echo Installing dependencies...
-      - cd my-vue-repo
       - npm install
   build:
     commands:
